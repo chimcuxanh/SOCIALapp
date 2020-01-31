@@ -294,20 +294,22 @@ public class profileFragment extends Fragment {
                         if(!TextUtils.isEmpty(value))
                         {
                             pd.show();
+
                             HashMap<String, Object> result = new HashMap<>();
                             result.put(key,value);
                             databaseReference.child(user.getUid()).updateChildren(result)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            pd.show();
+                                            pd.dismiss();
+
                                             Toast.makeText(getActivity(), "Updated...", Toast.LENGTH_SHORT).show();
 
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    pd.show();
+                                    pd.dismiss();
                                     Toast.makeText(getActivity(),""+e.getMessage(), Toast.LENGTH_SHORT).show();
 
                                 }
@@ -385,7 +387,8 @@ public class profileFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode
+            , @NonNull String[] permissions, @NonNull int[] grantResults) {
         // this method called when is user press Allow  or deny from permission request dialog
         //*here we will handle  permission case  (allowed or deny)
         switch(requestCode){
