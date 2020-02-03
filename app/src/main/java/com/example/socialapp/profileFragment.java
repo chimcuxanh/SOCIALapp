@@ -200,8 +200,6 @@ public class profileFragment extends Fragment {
         requestPermissions(storagepermission,STORAGE_REQUEST_CODE);
     }
 
-
-
     private boolean checkcamerapermission(){
         //check if storage permission is enabled or not
         //return true if enabled
@@ -218,6 +216,7 @@ public class profileFragment extends Fragment {
         //request runtime storage permission
         requestPermissions(camerapermission,CAMERA_REQUEST_CODE);
     }
+
     private void showEditprofileDialog()    {
         //show dialog edit name , edit phone , edit cover photo ,
         // edit image
@@ -244,7 +243,6 @@ public class profileFragment extends Fragment {
                     //edit name clicked
                     pd.setMessage("Update your name ");
                     profileorcover = "image"; // changing profile picture , make sure to assign same value
-                    showImagePicDialog();
                     showNamephoneUpdatedialog("name");
                 }
                 else if (which == 2)
@@ -252,7 +250,6 @@ public class profileFragment extends Fragment {
                     //edit phone clicked
                     pd.setMessage("Update your Number phone");//changing cover photo , make sure to assign same value
                     profileorcover = "cover";
-                    showImagePicDialog();
                     showNamephoneUpdatedialog("phone");
 
                 }
