@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +61,9 @@ public class profileFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     //storage
-    StorageReference storageReference;
+    StorageReference storageReference;// khai bao
     //path where image of user profile and cover will be stored
-    String storagepath = "User_Profile_Cover_Img/";
+    String storagepath = "User_Profile_Cover_Img/";//ok
 
 
     ImageView avatarIv,coverIv;
@@ -148,6 +150,7 @@ public class profileFragment extends Fragment {
 
                     try {
                         //if image is received  then set
+
                         Picasso.get().load(image).into(avatarIv);
 
                     }
@@ -155,6 +158,7 @@ public class profileFragment extends Fragment {
                     catch (Exception e){
                         //if there is any exception white getting image then set default
                         Picasso.get().load(R.drawable.ic_default_image_white).into(avatarIv);
+                        Log.e("bbb","avatarIV loi cmnr");
                     }
 
                     try {
@@ -165,6 +169,8 @@ public class profileFragment extends Fragment {
 
                     catch (Exception e){
                         //if there is any exception white getting image then set default
+                        Picasso.get().load(R.drawable.ic_default_image_white).into(coverIv);
+                        Log.e("bbb","cover loi cmnr");
                     }
                 }
 
@@ -257,7 +263,8 @@ public class profileFragment extends Fragment {
                 else if (which == 3)
                 {
                     //edit cover photo clicked
-                    pd.setMessage("Update cover photo");
+                    pd.setMessage("Update cover photo");//changing cover photo , make sure to assign same value
+                    showImagePicDialog();
 
                 }
             }
@@ -299,7 +306,6 @@ public class profileFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             pd.dismiss();
-
                                             Toast.makeText(getActivity(), "Updated...", Toast.LENGTH_SHORT).show();
 
                                         }
@@ -335,8 +341,6 @@ public class profileFragment extends Fragment {
         });
         //create and show dialog
         builder.create().show();
-
-
     }
 
     private void showImagePicDialog() {
@@ -427,7 +431,7 @@ public class profileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //this method will be called after picking image from camera or gallery
-        if(resultCode == RESULT_OK)
+        if(resultCode == RESULT_OK )
         {
             if(requestCode == IMAGE_PICK_GALLERY_CODE)
             {
@@ -439,6 +443,7 @@ public class profileFragment extends Fragment {
             if(requestCode ==  IMAGE_PICK_CAMERA_CODE)
             {
                 //image picked from camera ,get uri of image
+
                 uploadProfileCoverphoto(image_uri);
                 
             }
@@ -447,7 +452,7 @@ public class profileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void uploadProfileCoverphoto(final Uri image_uri) {
+    private void uploadProfileCoverphoto(final Uri uri) {
         // show progress
         pd.show();
         /*Instead of creating separate function for profile Picture and cover photo
@@ -462,9 +467,10 @@ public class profileFragment extends Fragment {
         //* we will use UID of the currently signed in user as name of the image so there will be only one image
         //* profile and one image for cover for each user
         //path and name of image for cover for each user
-        String filepathandname =  storagepath+ ""+profileorcover+"_"+ user.getUid();
-        StorageReference storageReference2nd = storageReference.child(filepathandname);
-        storageReference2nd.putFile(image_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        String filePathAndName =  storagepath+ "" +profileorcover+ "_" + user.getUid();
+
+        StorageReference storageReference2nd = storageReference.child(filePathAndName);
+        storageReference2nd.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 //image is uploaded  to storage , now get it url and store in user's database
@@ -472,8 +478,7 @@ public class profileFragment extends Fragment {
                 while(!uriTask.isSuccessful());
                 Uri downloadUri = uriTask.getResult();
                 //check ig image  is uploaded or not and url is received
-                if(uriTask.isSuccessful())
-                {
+                if(uriTask.isSuccessful()){
                     //image uploaded
                     //add/update url in user's database
                     HashMap<String,Object> results = new HashMap<>();
@@ -483,6 +488,7 @@ public class profileFragment extends Fragment {
                     //wil be saved  as value against key "image" or "cover"
 
                     results.put(profileorcover,downloadUri.toString());
+
                     databaseReference.child(user.getUid()).updateChildren(results)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -490,7 +496,8 @@ public class profileFragment extends Fragment {
                                     //url in database of user is added successful
                                     // dismiss progress bar
                                     pd.dismiss();
-                                    Toast.makeText(getActivity(), "Image Updated", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Image Updated",
+                                            Toast.LENGTH_SHORT).show();
 
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -499,13 +506,12 @@ public class profileFragment extends Fragment {
                             //error  adding url in database of user
                             //dismiss progress bar
                             pd.dismiss();
-                            Toast.makeText(getActivity(), "Error Updating Image ...", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Error Updating Image ...",
+                                    Toast.LENGTH_SHORT).show();
                             
 
                         }
                     });
-
-                    
                 }
                 else
                     {

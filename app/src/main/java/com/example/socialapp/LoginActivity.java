@@ -39,14 +39,14 @@ import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 2;
+    private static final int RC_SIGN_IN = 2; //gia tri tra ve
     GoogleSignInClient mGoogleSignInClient;
     EditText mEmailEdt, mpasswordEdt;
     TextView Nothaveaccount, mRecoverTv;
     Button mLogintBtn;
-    private FirebaseAuth mAuth;
-    ProgressDialog progressDialog;
-    SignInButton mggbtn;
+    private FirebaseAuth mAuth; // phai khai bao
+    ProgressDialog progressDialog;   // qua trình sử lý
+    SignInButton mggbtn; // nut dang nhap google
 
 
     @Override
@@ -71,8 +71,8 @@ public class LoginActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar(); // tao moi cai acctionbar
         actionBar.setTitle("Login ");
         //enable back button. cho phep quay tro lai . co cai nut goc trai' man hinh
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
         //init
         mggbtn = findViewById(R.id.googleLoginBtn);
         mEmailEdt = findViewById(R.id.emailEt);

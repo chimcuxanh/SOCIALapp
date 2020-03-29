@@ -44,18 +44,18 @@ public class RegisterActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar(); // tao moi cai acctionbar
         actionBar.setTitle("Create Account ");
         //enable back button. cho phep quay tro lai . co cai nut goc trai' man hinh
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
         // install assitans firebase
         mAuth = FirebaseAuth.getInstance();
 
         //init
         mhave_accountTv = findViewById(R.id.have_accountTv);
-        mEmailEt = (EditText) findViewById(R.id.emailEt);
-        mPasswordEt = (EditText) findViewById(R.id.passEt);
-        mRegisterBtn = (Button) findViewById(R.id.registerBtn);
+        mEmailEt =  findViewById(R.id.emailEt);
+        mPasswordEt = findViewById(R.id.passEt);
+        mRegisterBtn = findViewById(R.id.registerBtn);
         progressdialog = new ProgressDialog(this); //??? chua hieu cai this
-        progressdialog.setMessage("Registering user ....");
+        progressdialog.setMessage("Registering user....");
         //handle click register
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,11 +68,12 @@ public class RegisterActivity extends AppCompatActivity {
                     //set error and forcuss to email edittext
                     mEmailEt.setError("Invalid Email");
                     mEmailEt.setFocusable(true);
+                    // vien do xung quanh khung nhap
                 }
                 else if (password.length()<6){
                     //set error and forcuss to password edittext
                     mPasswordEt.setError("Password length at least 6 characters");
-                    mEmailEt.setFocusable(true);
+                    mPasswordEt.setFocusable(true);
                 }
                 else {
                     registerUser(email,password);// register the user
@@ -133,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-                            Toast.makeText(RegisterActivity.this ,"Registered ... \n"+user.getEmail(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this ,"Registered\n"+user.getEmail(),Toast.LENGTH_LONG).show();
                             startActivity(new Intent(RegisterActivity.this, DashboardActivity.class));
                             finish();
                         } else {
